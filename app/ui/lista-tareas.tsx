@@ -5,6 +5,7 @@ import { useState, type FormEvent } from 'react'
 type Tarea = {
   id: number
   texto: string
+  hecha: boolean
 }
 
 export default function ListaTareas() {
@@ -16,8 +17,19 @@ export default function ListaTareas() {
     const limpio = texto.trim()
     if (!limpio) return
 
-    setTareas((anteriores) => [...anteriores, { id: Date.now(), texto: limpio }])
+    setTareas((anteriores) => [
+      ...anteriores,
+      { id: Date.now(), texto: limpio, hecha: false },
+    ])
     setTexto('')
+  }
+
+  function alternarHecha(id: number) {
+    setTareas((anteriores) =>
+      anteriores.map((tarea) =>
+        tarea.id === id ? { ...tarea, hecha: !tarea.hecha } : tarea
+      )
+    )
   }
 
   return (
@@ -49,9 +61,30 @@ export default function ListaTareas() {
           {tareas.map((tarea) => (
             <li
               key={tarea.id}
-              className="rounded-lg border border-zinc-200 px-4 py-2 text-black dark:border-zinc-800 dark:text-zinc-50"
+              className="flex items-center justify-between gap-4 rounded-lg border border-zinc-200 px-4 py-2 dark:border-zinc-800"
             >
-              {tarea.texto}
+              <span
+                className={
+                  tarea.hecha
+                    ? 'text-zinc-400 line-through dark:text-zinc-500'
+                    : 'text-black dark:text-zinc-50'
+                }
+              >
+                {tarea.texto}
+              </span>
+              <button
+                type="button"
+                onClick={() => alternarHecha(tarea.id)}
+                aria-pressed={tarea.hecha}
+                aria-label={
+                  tarea.hecha
+                    ? `Marcar "${tarea.texto}" como pendiente`
+                    : `Marcar "${tarea.texto}" como hecha`
+                }
+                className="shrink-0 rounded-md border border-zinc-300 px-3 py-1 text-sm text-black transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-800"
+              >
+                {tarea.hecha ? 'Deshacer' : 'Hecha'}
+              </button>
             </li>
           ))}
         </ul>
