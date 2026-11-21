@@ -32,6 +32,10 @@ export default function ListaTareas() {
     )
   }
 
+  function borrarTarea(id: number) {
+    setTareas((anteriores) => anteriores.filter((tarea) => tarea.id !== id))
+  }
+
   return (
     <div className="flex w-full flex-col gap-6">
       <form onSubmit={agregarTarea} className="flex gap-2">
@@ -72,19 +76,29 @@ export default function ListaTareas() {
               >
                 {tarea.texto}
               </span>
-              <button
-                type="button"
-                onClick={() => alternarHecha(tarea.id)}
-                aria-pressed={tarea.hecha}
-                aria-label={
-                  tarea.hecha
-                    ? `Marcar "${tarea.texto}" como pendiente`
-                    : `Marcar "${tarea.texto}" como hecha`
-                }
-                className="shrink-0 rounded-md border border-zinc-300 px-3 py-1 text-sm text-black transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-800"
-              >
-                {tarea.hecha ? 'Deshacer' : 'Hecha'}
-              </button>
+              <div className="flex shrink-0 gap-2">
+                <button
+                  type="button"
+                  onClick={() => alternarHecha(tarea.id)}
+                  aria-pressed={tarea.hecha}
+                  aria-label={
+                    tarea.hecha
+                      ? `Marcar "${tarea.texto}" como pendiente`
+                      : `Marcar "${tarea.texto}" como hecha`
+                  }
+                  className="rounded-md border border-zinc-300 px-3 py-1 text-sm text-black transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-50 dark:hover:bg-zinc-800"
+                >
+                  {tarea.hecha ? 'Deshacer' : 'Hecha'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => borrarTarea(tarea.id)}
+                  aria-label={`Borrar "${tarea.texto}"`}
+                  className="rounded-md border border-red-300 px-3 py-1 text-sm text-red-700 transition-colors hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950"
+                >
+                  Borrar
+                </button>
+              </div>
             </li>
           ))}
         </ul>
