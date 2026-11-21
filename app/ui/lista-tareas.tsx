@@ -11,6 +11,7 @@ type Tarea = {
 export default function ListaTareas() {
   const [texto, setTexto] = useState('')
   const [tareas, setTareas] = useState<Tarea[]>([])
+  const pendientes = tareas.filter((tarea) => !tarea.hecha).length
 
   function agregarTarea(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault()
@@ -53,6 +54,10 @@ export default function ListaTareas() {
           Agregar
         </button>
       </form>
+
+      <p aria-live="polite" className="text-zinc-500 dark:text-zinc-400">
+        Pendientes: {pendientes}
+      </p>
 
       {tareas.length === 0 ? (
         <p className="text-zinc-500 dark:text-zinc-400">Todavía no hay tareas.</p>
